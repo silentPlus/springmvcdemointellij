@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.0.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd"
+       default-lazy-init="true" default-autowire="byName">
+
+    <description>加载资源文件</description>
+    <!-- 引入jdbc配置文件 -->
+    <context:property-placeholder location="classpath:jdbc/jdbc.properties" ignore-unresolvable="true"/>
+
+    <!-- 启用aspectj支持 用于开启Spring对@AspectJ风格切面的支持-->
+    <aop:aspectj-autoproxy proxy-target-class="true" />
+
+    <context:component-scan base-package="com.suvan" use-default-filters="false">
+        <context:include-filter type="annotation" expression="org.aspectj.lang.annotation.Aspect"/>
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Repository" />
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Service" />
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
+        <property name="slowSqlMillis" value="10000" />
+        <property name="logSlowSql" value="true" />
+    </bean>
+
+    <bean id="wall-filter" class="com.alibaba.druid.wall.WallFilter">
+        <property name="dbType" value="mysql" />
+        <property name="config" ref="wall-filter-config" />
+    </bean>
+    <bean id="wall-filter-config" class="com.alibaba.druid.wall.WallConfig" init-method="init">
+        <property name="dir" value="META-INF/druid/wall/mysql" />
+        <property name="objectCheck" value="false"/>
+        <property name="limitZeroAllow" value="true" />
+    </bean>
+
+    <!-- druid Spring配置数据源 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close">
+        <!-- 基本属性 url、username、password -->
+        <property name="url" value="${database.url}" />
+        <property name="username" value="${database.username}" />
+        <property name="password" value="${database.password}" />
+        <!-- 数据源驱动类可不写，Druid默认会自动根据URL识别DriverClass -->
+        <property name="driverClassName" value="${database.driver}" />
+        <!-- 配置初始化大小、最小、最大 -->
+        <property name="initialSize" value="1" />
+        <!-- 最小连接池数量 -->
+        <property name="minIdle" value="10" />
+        <!-- 最大连接池数量 -->
+        <property name="maxActive" value="100" />
+        <!-- 配置获取连接等待超时的时间 -->
+        <property name="maxWait" value="60000" />
+        <!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+        <property name="timeBetweenEvictionRunsMillis" value="60000" />
+        <!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+        <property name="minEvictableIdleTimeMillis" value="300000" />
+        <!-- 用来检测连接是否有效的sql -->
+        <property name="validationQuery" value="SELECT 'x' FROM DUAL" />
+        <!-- 空闲时检测 建议配置为true，不影响性能，并且保证安全性。申请连接的时候检测，如果空闲时间大于timeBetweenEvictionRunsMillis，执行validationQuery检测连接是否有效。 -->
+        <property name="testWhileIdle" value="true" />
+        <!-- 是否在获得连接后检测其可用性 -->
+        <property name="testOnBorrow" value="false" />
+        <!-- 归还连接时执行连接放回连接池时检测 -->
+        <property name="testOnReturn" value="false" />
+        <!-- 打开PSCache，并且指定每个连接上PSCache的大小 （Oracle使用） 如果用Oracle，则把poolPreparedStatements配置为true，mysql可以配置为false。分库分表较多的数据库，建议配置为false。 -->
+        <property name="poolPreparedStatements" value="true" />
+        <property name="maxPoolPreparedStatementPerConnectionSize"
+                  value="20" />
+        <!-- x要启用PSCache，必须配置大于0 -->
+        <property name="maxOpenPreparedStatements" value="60" />
+        <!-- 对于长时间不使用的连接强制关闭 -->
+        <property name="removeAbandoned" value="true" />
+        <!-- 超过30分钟开始关闭空闲连接 -->
+        <property name="removeAbandonedTimeout" value="1800" />
+        <!-- 配置监控统计拦截的filters stat,wall,log4j-->
+        <property name="filters" value="stat" />
+        <!-- 将当前关闭动作记录到日志 -->
+        <property name="logAbandoned" value="true" />
+        <!-- 每隔5分钟将监控日志输出到日志文件中，单位是毫秒。 -->
+        <property name="timeBetweenLogStatsMillis" value="300000" />
+        <!-- 监控数据库 -->
+        <property name="proxyFilters">
+            <list>
+                <ref bean="stat-filter" />
+                <ref bean="wall-filter" />
+            </list>
+        </property>
+    </bean>
+
+    <!--&lt;!&ndash; sessionFactory &ndash;&gt;
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+        &lt;!&ndash; 引用的数据湖 &ndash;&gt;
+        <property name="dataSource" ref="dataSource" />
+        <property name="hibernateProperties">
+            <props>
+                &lt;!&ndash; 方言 &ndash;&gt;
+                <prop key="hibernate.dialect">${${currentDatabase}Dialect}</prop>
+                &lt;!&ndash; session &ndash;&gt;
+                <prop key="hibernate.current_session_context_class">
+                    org.springframework.orm.hibernate4.SpringSessionContext
+                </prop>
+                &lt;!&ndash; 后台输出SQL语句 &ndash;&gt;
+                <prop key="hibernate.show_sql">true</prop>
+                &lt;!&ndash; 后台输出SQL语句时格式化 &ndash;&gt;
+                <prop key="hibernate.format_sql">true</prop>
+                &lt;!&ndash; 数据库表的操作 &ndash;&gt;
+                &lt;!&ndash; <prop key="hibernate.hbm2ddl.auto">update</prop> &ndash;&gt;
+                &lt;!&ndash; <prop key="hibernate.hbm2ddl.auto">create</prop> &ndash;&gt;
+                <prop key="hibernate.hbm2ddl.auto">none</prop>
+                &lt;!&ndash; INFO: HHH000424: Disabling contextual LOB creation as createClob()
+                    method threw error : &ndash;&gt;
+                <prop key="hibernate.temp.use_jdbc_metadata_defaults">false</prop>
+                &lt;!&ndash; 二级缓存 &ndash;&gt;
+                <prop key="hibernate.cache.use_second_level_cache">true</prop>
+                &lt;!&ndash; 查询缓存 &ndash;&gt;
+                <prop key="hibernate.cache.use_query_cache">true</prop>
+                &lt;!&ndash; 缓存工厂&ndash;&gt;
+                <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>
+                &lt;!&ndash; <prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</prop> &ndash;&gt;
+                &lt;!&ndash; 自定义的CacheProvider的类名. 取值 classname.of.CacheProvider &ndash;&gt;
+                <prop key="hibernate.cache.provider_class">org.hibernate.cach.ehcache.EhCacheRegionFactory</prop>
+                &lt;!&ndash; <prop key="hibernate.cache.provider_class">org.hibernate.cache.ehcache.SingletonEhCacheRegionFactory</prop> &ndash;&gt;
+
+            </props>
+        </property>
+        &lt;!&ndash; 自动扫描的包 &ndash;&gt;
+        <property name="packagesToScan" value="com.suvan.entity" />
+    </bean>-->
+
+    <!-- jdbc 事务管理 -->
+    <bean id="tc" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+        <property name="dataSource" ref="dataSource" />
+    </bean>
+    <!-- hibernate4 事务管理 -->
+    <!--<bean id="tso" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>-->
+
+    <!-- 配置事务传播特性 -->
+    <!--<tx:advice id="transactionAdvice" transaction-manager="tc">
+        <tx:attributes>
+            <tx:method name="multiDs*" propagation="REQUIRED"  rollback-for="Exception"/>
+        </tx:attributes>
+    </tx:advice>-->
+    <!-- 配置哪些类的哪些方法参与事务	 -->
+    <!--<aop:config>
+        <aop:pointcut id="serviceMethods" expression="execution(* com.suvan.service..*.*(..))" />
+        <aop:advisor advice-ref="transactionAdvice" pointcut-ref="serviceMethods" />
+    </aop:config>-->
+
+    <!-- 通过注解来管理事务 -->
+    <tx:annotation-driven transaction-manager="tc" proxy-target-class="true" />
+
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="UTF-8" />
+        <property name="maxInMemorySize" value="20960" />
+        <property name="maxUploadSize" value="20971520" />
+    </bean>
+
+</beans>

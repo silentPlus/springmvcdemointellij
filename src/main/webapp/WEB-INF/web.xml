@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns:websocket="http://www.springframework.org/schema/websocket"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd
+		 http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket.xsd"
+         id="WebApp_ID" version="2.5">
+
+  <display-name>Spring MVC Demo</display-name>
+
+    <context-param>
+        <param-name>webAppRootKey</param-name>
+        <param-value>springmvcdemointellij.root</param-value>
+    </context-param>
+    <!-- logback日志 -->
+    <context-param>
+        <param-name>logbackConfigLocation</param-name>
+        <param-value>classpath:logback/logback.xml</param-value>
+    </context-param>
+    <!-- 上下文 -->
+    <context-param>
+        <description>上下文的配置</description>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:spring/spring-context.xml</param-value>
+    </context-param>
+    <!-- 上下文监听器 -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <!-- Spring 刷新Introspector防止内存泄露 -->
+    <listener>
+        <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+    </listener>
+
+    <!-- 字符编码过滤器 -->
+    <filter>
+        <description>字符编码过滤器</description>
+        <filter-name>characterEncodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>characterEncodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!-- hibernateSession过滤器 -->
+    <!--<filter>
+        <filter-name>openSessionInViewFilter</filter-name>
+        <filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
+        &lt;!&ndash; singleSession默认为true，若设为false则便是没用OpenSessionInView &ndash;&gt;
+        <init-param>
+            <param-name>singleSession</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        &lt;!&ndash; 解决Hibernate的Write operations are not allowed in read-only mode (FlushMode.NEVER/MANUAL):Turn
+            your Session into FlushMode.COMMIT/AUTO or remove 'readOnly' marker from
+            transaction definition.问题 &ndash;&gt;
+        <init-param>
+            <param-name>flushMode</param-name>
+            <param-value>AUTO</param-value>
+        </init-param>
+        &lt;!&ndash; 默认景象下，这个Filter会在Spring的bean池中找一个叫做sessionFactory的bean。若是应用了其他名字的SessionFactory，则应当在这里 &ndash;&gt;
+        <init-param>
+            <param-name>sessionFactoryBeanName</param-name>
+            &lt;!&ndash;指定对Spring配置中哪个sessionFactory使用OpenSessionInView &ndash;&gt;
+            <param-value>sessionFactory</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>openSessionInViewFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>-->
+
+    <!-- springMVC -->
+    <servlet>
+        <description>springDispatcher</description>
+        <servlet-name>springMVC</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring/spring-mvc.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>springMVC</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <!-- druid监控配置  http://www.cnblogs.com/ansn001/p/4571606.html-->
+    <servlet>
+        <description>druid监控配置</description>
+        <servlet-name>DruidStatView</servlet-name>
+        <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+        <!-- 白名单 -->
+        <init-param>
+            <param-name>allow</param-name>
+            <param-value>127.0.0.1</param-value>
+        </init-param>
+        <init-param>
+            <param-name>deny</param-name>
+            <param-value>192.168.4.188</param-value>
+        </init-param>
+        <!-- 允许清空统计数据 -->
+        <init-param>
+            <param-name>resetEnable</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <!--用户名-->
+        <init-param>
+            <param-name>loginUsername</param-name>
+            <param-value>druid</param-value>
+        </init-param>
+        <!--密码-->
+        <init-param>
+            <param-name>loginPassword</param-name>
+            <param-value>druid</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DruidStatView</servlet-name>
+        <url-pattern>/druid/*</url-pattern>
+    </servlet-mapping>
+    <!-- 如果需要监控uri，设置Web关联监控配置 -->
+    <filter>
+        <filter-name>DruidWebStatFilter</filter-name>
+        <filter-class>com.alibaba.druid.support.http.WebStatFilter</filter-class>
+        <!-- 排除统计干扰 -->
+        <init-param>
+            <param-name>exclusions</param-name>
+            <param-value>*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*</param-value>
+        </init-param>
+        <!-- druid 0.2.7版本开始支持profile，配置profileEnable能够监控单个url调用的sql列表。 -->
+        <init-param>
+            <param-name>profileEnable</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>DruidWebStatFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!--logback监控-->
+    <servlet>
+        <servlet-name>ViewStatusMessages</servlet-name>
+        <servlet-class>ch.qos.logback.classic.ViewStatusMessagesServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>ViewStatusMessages</servlet-name>
+        <url-pattern>/logbackStatus</url-pattern>
+        <!-- ttp://host/yourWebapp/logbackStatus -->
+    </servlet-mapping>
+
+    <session-config>
+        <session-timeout>60</session-timeout>
+    </session-config>
+
+    <!-- 错误页面 -->
+    <error-page>
+        <error-code>403</error-code>
+        <location>page/common/error/500.jsp</location>
+    </error-page>
+
+    <welcome-file-list>
+        <welcome-file>index.html</welcome-file>
+        <welcome-file>index.htm</welcome-file>
+        <welcome-file>index.jsp</welcome-file>
+        <welcome-file>default.html</welcome-file>
+        <welcome-file>default.htm</welcome-file>
+        <welcome-file>default.jsp</welcome-file>
+    </welcome-file-list>
+</web-app>
