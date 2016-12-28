@@ -552,6 +552,8 @@
                 <redis.connection.pool.maxWaitMillis>1000</redis.connection.pool.maxWaitMillis>
                 <redis.connection.master.ip>127.0.0.1</redis.connection.master.ip>
                 <redis.connection.master.port>6379</redis.connection.master.port> -->
+                <!--常量参数配置-->
+                <static.value>STATIC VALUE</static.value>
             </properties>
             <!-- 默认激活本环境 -->
             <activation>

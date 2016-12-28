@@ -4,5 +4,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
     <description>加载资源文件</description>
-    <import resource="classpath:jdbc/springmvc-jdbc.xml" />
+    <import resource="classpath:jdbc/spring-jdbc.xml" />
+    <import resource="classpath:static/static-constants.xml" />
 </beans>

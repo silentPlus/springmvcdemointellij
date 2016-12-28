@@ -76,7 +76,7 @@
     <!-- 对通用视图(jsp)的配置 -->
     <bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" />
-        <property name="prefix" value="/WEB-INF/template/jsp/" />
+        <property name="prefix" value="/WEB-INF/page/" />
         <property name="suffix" value=".jsp" />
     </bean>
 
