@@ -23,8 +23,8 @@ import java.util.Map;
 @Repository
 public class BaseDaoImpl extends NamedParameterJdbcDaoSupport implements BaseDao<T> {
 
-    public final static String PAGE_SQL_PREFIX = "select * from(select m.*,rownum num from (";
-    public final static String PAGE_SQL_END = ") m where rownum<=%1$s) where num>%2$s";
+    private final static String PAGE_SQL_PREFIX = "select * from(select m.*,rownum num from (";
+    private final static String PAGE_SQL_END = ") m where rownum<=%1$s) where num>%2$s";
 
     @Override
     public JdbcTemplate getJdbc() {
@@ -82,7 +82,7 @@ public class BaseDaoImpl extends NamedParameterJdbcDaoSupport implements BaseDao
 
     @Override
     public T getJavaBean(String sql, Class<T> returnType, Object... paramValue) {
-        RowMapper<T> rowMapper = new BeanPropertyRowMapper<T>(returnType);
+        RowMapper<T> rowMapper = new BeanPropertyRowMapper<>(returnType);
         try{
             return this.getJdbcTemplate().queryForObject(sql, rowMapper, paramValue);
         }catch(Exception ex){
@@ -93,7 +93,7 @@ public class BaseDaoImpl extends NamedParameterJdbcDaoSupport implements BaseDao
 
     @Override
     public T getBeanByBean(String sql, Class<T> returnType, Object javaBean) {
-        RowMapper<T> rowMapper = new BeanPropertyRowMapper<T>(returnType);
+        RowMapper<T> rowMapper = new BeanPropertyRowMapper<>(returnType);
         SqlParameterSource paramSource = new BeanPropertySqlParameterSource(javaBean);
         try{
             return this.getNamedParameterJdbcTemplate().queryForObject(sql, paramSource, rowMapper);
@@ -104,7 +104,7 @@ public class BaseDaoImpl extends NamedParameterJdbcDaoSupport implements BaseDao
 
     @Override
     public T getBeanByMap(String sql, Class<T> returnType, Map<String, Object> mapParams) {
-        RowMapper<T> rowMapper = new BeanPropertyRowMapper<T>(returnType);
+        RowMapper<T> rowMapper = new BeanPropertyRowMapper<>(returnType);
         try{
             return this.getNamedParameterJdbcTemplate().queryForObject(sql, mapParams, rowMapper);
         }catch(Exception ex){
@@ -114,13 +114,13 @@ public class BaseDaoImpl extends NamedParameterJdbcDaoSupport implements BaseDao
 
     @Override
     public List<T> getList(String sql, Class<T> returnType, Object... paramValue) {
-        RowMapper<T> rowMapper = new BeanPropertyRowMapper<T>(returnType);
+        RowMapper<T> rowMapper = new BeanPropertyRowMapper<>(returnType);
         return this.getJdbcTemplate().query(sql, rowMapper, paramValue);
     }
 
     @Override
     public List<T> getList(String sql, Class<T> returnType) {
-        RowMapper<T> rowMapper = new BeanPropertyRowMapper<T>(returnType);
+        RowMapper<T> rowMapper = new BeanPropertyRowMapper<>(returnType);
         return this.getJdbcTemplate().query(sql, rowMapper);
     }
     @Override
@@ -130,27 +130,26 @@ public class BaseDaoImpl extends NamedParameterJdbcDaoSupport implements BaseDao
 
     @Override
     public long getCount(String countSQL, Object... paramValue) {
-        long count=this.getJdbcTemplate().queryForObject(countSQL, Long.class, paramValue);
-        return count;
+        return this.getJdbcTemplate().queryForObject(countSQL, Long.class, paramValue);
     }
 
 
     @Override
     public PageInfo<T> getPageModel(PageInfo<T> model, StringBuffer querySQL, StringBuffer countSQL, Class<T> returnType, Object... paramValue) {
 
-        // 计算总记录数
+        // 1、计算总记录数
         long allCount = this.getCount(countSQL.toString(), paramValue);
-        // 获取分页记录集
-        // 1。构造完整的分页语句
+        // 2、获取分页记录集
+        // 2.1、构造完整的分页语句
         int rowNumEnd=model.getCurrentPage()* model.getPageSize();
         int rowNumBegin=(model.getCurrentPage()-1)* model.getPageSize();
         querySQL.insert(0, PAGE_SQL_PREFIX);
         querySQL.append(String.format(PAGE_SQL_END, rowNumEnd,rowNumBegin));
 
-        // 2.连数据库查询
+        // 2.2、连数据库查询
         List<T> result = this.getList(querySQL.toString(), returnType, paramValue);
 
-        // 3.重置分页数据
+        // 3、重置分页数据
         model.setTotalRecord(allCount);
         model.setTotalPage();
         model.setPageInfoResult(result);
@@ -160,20 +159,19 @@ public class BaseDaoImpl extends NamedParameterJdbcDaoSupport implements BaseDao
 
     @Override
     public PageInfo<Map<String, Object>> getPageModel(PageInfo<Map<String, Object>> model, StringBuffer querySQL,StringBuffer countSQL, Object... paramValue) {
-        // TODO Auto-generated method stub
-        // 计算总记录数
+        // 1、计算总记录数
         long allCount = this.getCount(countSQL.toString(), paramValue);
-        // 获取分页记录集
-        // 1。构造完整的分页语句
+        // 2、获取分页记录集
+        // 2.1、构造完整的分页语句
         int rowNumEnd=model.getCurrentPage()* model.getPageSize();
         int rowNumBegin=(model.getCurrentPage()-1)* model.getPageSize();
         querySQL.insert(0, PAGE_SQL_PREFIX);
         querySQL.append(String.format(PAGE_SQL_END, rowNumEnd,rowNumBegin));
 
-        // 2.连数据库查询
+        // 2.2、连数据库查询
         List<Map<String, Object>> result = this.getListMap(querySQL.toString(), paramValue);
 
-        // 3.重置分页数据
+        // 3、重置分页数据
         model.setTotalRecord(allCount);
         model.setTotalPage();
         model.setPageInfoResult(result);
