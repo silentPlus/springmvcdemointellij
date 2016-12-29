@@ -16,146 +16,130 @@ public interface BaseDao<T> {
      * 获取当前使用的jdbc
      * @return JdbcTemplate
      */
-    public JdbcTemplate getJdbc();
+    JdbcTemplate getJdbc();
 
     /**
-     * 方式javaBean传参 ,修改操作
-     * @param nameSql
-     * @param javaBean
-     * @return int
+     * @param nameSql 以:name方式命名参数的sql语句
+     * @param javaBean 参数对象
+     * @return 受影响行数
      */
-    public int updateByBean(String nameSql, Object javaBean);
+    int updateByBean(String nameSql, Object javaBean);
 
     /**
-     * 方式javaBean传参 ,修改操作 ,并且回传主键值
-     * @param nameSql
-     * @param javaBean
-     * @param keyName
-     * @return String
+     * @param nameSql 以:name方式命名参数的sql语句
+     * @param javaBean 参数对象
+     * @param keyName 主键名
+     * @return 主键值
      */
-    public String updateByBeanForkey(String nameSql, Object javaBean,String keyName);
+    String updateByBeanForkey(String nameSql, Object javaBean, String keyName);
 
     /**
-     * 方式javaBean传参 ,修改操作 ,并且回传多主键值
-     * @param nameSql
-     * @param javaBean
-     * @param keyNames
-     * @return Map<String, Object>
+     * @param nameSql 以:name方式命名参数的sql语句
+     * @param javaBean 参数对象
+     * @param keyNames 需要返回的值的名称数组
+     * @return 返回值集合
      */
-    public Map<String, Object> updateByBeanForkeys(String nameSql, Object javaBean, String[] keyNames);
+    Map<String, Object> updateByBeanForkeys(String nameSql, Object javaBean, String[] keyNames);
 
     /**
-     * 方式Map传参 ,修改操作
-     * @param sql
-     * @param mapParams
-     * @return int
+     * @param sql 以:name方式命名参数的sql语句
+     * @param mapParams 参数集合
+     * @return 受影响的行数
      */
-    public int updateByMap(String sql, Map<String, Object> mapParams);
+    int updateByMap(String sql, Map<String, Object> mapParams);
 
     /**
-     * 方式Map传参 ,修改操作 ,并且回传主键值
-     * @param sql
-     * @param mapParams
-     * @param keyName
-     * @return String
+     * @param sql 以:name方式命名参数的sql语句
+     * @param mapParams 参数集合
+     * @param keyName 返回值的名称
+     * @return 返回值
      */
-    public String updateByMapForkey(String sql, Map<String, Object> mapParams,String keyName);
+    String updateByMapForkey(String sql, Map<String, Object> mapParams, String keyName);
 
     /**
-     * 方式Map传参 ,修改操作 ,并且回传多主键值
-     * @param sql
-     * @param mapParams
-     * @param keyNames
-     * @return Map<String, Object>
+     * @param sql 以:name方式命名参数的sql语句
+     * @param mapParams 参数集合
+     * @param keyNames 需要返回的值的名称数组
+     * @return 返回值集合
      */
-    public Map<String, Object> updateByMapForkeys(String sql, Map<String, Object> mapParams,String[] keyNames);
+    Map<String, Object> updateByMapForkeys(String sql, Map<String, Object> mapParams, String[] keyNames);
 
     /**
-     * ?方式传参 ,修改操作
-     * @param sql
-     * @param paramValue
-     * @return int
+     * @param sql 普通?方式传参的sql语句
+     * @param paramValue 参数，按顺序传递
+     * @return 受影响行数
      */
-    public int commonUpdate(String sql, Object... paramValue);
+    int commonUpdate(String sql, Object... paramValue);
 
     /**
-     * ?方式传参 ,根据泛型获取数据
-     * @param sql
-     * @param returnType
-     * @param paramValue
-     * @return T
+     * @param sql 普通?方式传参的sql语句
+     * @param returnType 返回值类型
+     * @param paramValue 参数，按顺序传递
+     * @return 返回对象
      */
-    public T getJavaBean(String sql, Class<T> returnType, Object... paramValue);
+    T getJavaBean(String sql, Class<T> returnType, Object... paramValue);
 
     /**
-     * 方式javaBean传参 ,根据泛型获取数据
-     * @param sql
-     * @param returnType
-     * @param javaBean
-     * @return T
+     * @param sql 以:name方式命名参数的sql语句
+     * @param returnType 返回值类型
+     * @param javaBean 参数对象
+     * @return 返回对象
      */
-    public T getBeanByBean(String sql, Class<T> returnType, Object javaBean);
+    T getBeanByBean(String sql, Class<T> returnType, Object javaBean);
 
     /**
-     * 方式Map传参 ,根据泛型获取数据
-     * @param sql
-     * @param returnType
-     * @param mapParams
-     * @return T
+     * @param sql 以:name方式命名参数的sql语句
+     * @param returnType 返回值类型
+     * @param mapParams 参数集合
+     * @return 返回对象
      */
-    public T getBeanByMap(String sql, Class<T> returnType, Map<String, Object> mapParams);
+    T getBeanByMap(String sql, Class<T> returnType, Map<String, Object> mapParams);
 
     /**
-     * ?方式Object传参 ,根据泛型获取数据列表
-     * @param sql
-     * @param returnType
-     * @param paramValue
-     * @return List<T>
+     * @param sql 普通?方式传参的sql语句
+     * @param returnType 返回值类型
+     * @param paramValue 参数，按顺序传递
+     * @return 返回对象的List集合
      */
-    public List<T> getList(String sql, Class<T> returnType, Object... paramValue);
+    List<T> getList(String sql, Class<T> returnType, Object... paramValue);
 
     /**
-     * 无传参 ,根据泛型获取数据列表
-     * @param sql
-     * @param returnType
-     * @return List</T>
+     * @param sql 无参数的sql语句
+     * @param returnType 返回值类型
+     * @return 返回对象的List集合
      */
-    public List<T> getList(String sql, Class<T> returnType);
+    List<T> getList(String sql, Class<T> returnType);
 
     /**
-     * ?方式Object传参 ,获取数据列表
-     * @param sql
-     * @param paramValue
-     * @return List<Map<String, Object>>
+     * @param sql 普通?方式传参的sql语句
+     * @param paramValue 参数，按顺序传递
+     * @return 返回结果集Map的List集合
      */
-    public List<Map<String, Object>> getListMap(String sql,Object...paramValue);
+    List<Map<String, Object>> getListMap(String sql, Object... paramValue);
 
     /**
-     * ?方式Object传参 ,计算总记录数
-     * @param countSQL
-     * @param paramValue
-     * @return long
+     * @param countSQL ?方式传参的sql语句
+     * @param paramValue 参数，按顺序传递
+     * @return 总记录数
      */
-    public long getCount(String countSQL, Object... paramValue);
+    long getCount(String countSQL, Object... paramValue);
 
     /**
-     * ?方式Object传参 ,javaBean分页
-     * @param model
-     * @param querySQL
-     * @param countSQL
-     * @param returnType
-     * @param paramValue
-     * @return PageInfo<T>
+     * @param model 分页对象
+     * @param querySQL 查询sql
+     * @param countSQL 查询总记录数sql
+     * @param returnType 返回值类型
+     * @param paramValue 参数，按顺序传递
+     * @return 分页对象
      */
-    public PageInfo<T> getPageModel(PageInfo<T> model, StringBuffer querySQL, StringBuffer countSQL, Class<T> returnType , Object... paramValue);
+    PageInfo<T> getPageModel(PageInfo<T> model, StringBuffer querySQL, StringBuffer countSQL, Class<T> returnType, Object... paramValue);
 
     /**
-     * ?方式Object传参 ,Map专用分页
-     * @param model
-     * @param querySQL
-     * @param countSQL
-     * @param paramValue
-     * @return PageInfo<Map<String, Object>>
+     * @param model Map集合的分页对象
+     * @param querySQL 查询sql
+     * @param countSQL 查询总记录数sql
+     * @param paramValue 参数，按顺序传递
+     * @return Map集合的分页对象
      */
-    public PageInfo<Map<String, Object>> getPageModel(PageInfo<Map<String, Object>> model, StringBuffer querySQL,StringBuffer countSQL, Object... paramValue);
+    PageInfo<Map<String, Object>> getPageModel(PageInfo<Map<String, Object>> model, StringBuffer querySQL, StringBuffer countSQL, Object... paramValue);
 }

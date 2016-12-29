@@ -36,6 +36,7 @@ public class BaseDaoImpl extends NamedParameterJdbcDaoSupport implements BaseDao
         SqlParameterSource paramSource = new BeanPropertySqlParameterSource(javaBean);
         return this.getNamedParameterJdbcTemplate().update(namedSql,paramSource);
     }
+
     @Override
     public String updateByBeanForkey(String namedSql, Object javaBean,String keyName) {
         SqlParameterSource paramSource = new BeanPropertySqlParameterSource(javaBean);
@@ -44,6 +45,7 @@ public class BaseDaoImpl extends NamedParameterJdbcDaoSupport implements BaseDao
         this.getNamedParameterJdbcTemplate().update(namedSql,paramSource,keyHolder,new String[]{keyName});
         return keyHolder.getKey().toString();
     }
+
     @Override
     public Map<String, Object> updateByBeanForkeys(String namedSql, Object javaBean,String[] keyNames) {
         SqlParameterSource paramSource = new BeanPropertySqlParameterSource(javaBean);
@@ -52,11 +54,11 @@ public class BaseDaoImpl extends NamedParameterJdbcDaoSupport implements BaseDao
         return keyHolder.getKeys();
     }
 
-
     @Override
     public int updateByMap(String namedSql, Map<String, Object> mapParams) {
         return this.getNamedParameterJdbcTemplate().update(namedSql,mapParams);
     }
+
     @Override
     public String updateByMapForkey(String namedSql, Map<String, Object> mapParams,String keyName){
         SqlParameterSource ps=new MapSqlParameterSource(mapParams);
@@ -64,6 +66,7 @@ public class BaseDaoImpl extends NamedParameterJdbcDaoSupport implements BaseDao
         this.getNamedParameterJdbcTemplate().update(namedSql,ps,keyHolder,new String[]{keyName});
         return  keyHolder.getKey().toString();
     }
+
     @Override
     public Map<String, Object> updateByMapForkeys(String namedSql, Map<String, Object> mapParams,String[] keyNames){
         SqlParameterSource ps=new MapSqlParameterSource(mapParams);
