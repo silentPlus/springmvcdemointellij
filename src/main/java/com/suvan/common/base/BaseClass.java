@@ -1,11 +1,9 @@
 package com.suvan.common.base;
 
-import com.suvan.common.constants.ConfigConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.portlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -23,7 +21,7 @@ public class BaseClass {
      * 主要用于非controller层获取request
      * @return HttpServletRequest
      */
-    public HttpServletRequest getRequest() {
+    protected HttpServletRequest getRequest() {
         return ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
     }
 
@@ -36,18 +34,16 @@ public class BaseClass {
     }
 
     /**
-     * 获取当前请求路径
      * http:// 127.0.0.1/springmvcdemointellij/index.html
-     * @return String
+     * @return 当前请求路径
      */
     public String getPath() {
         return getRequest().getRequestURL().toString();
     }
 
     /**
-     * 获取项目请求路径
      * http://127.0.0.1/springmvcdemointellij/
-     * @return String
+     * @return 项目请求路径
      */
     public String getProjectPath() {
         return getPath().replace(getRequest().getServletPath(), "") + "/";
@@ -55,21 +51,11 @@ public class BaseClass {
 
     /**
      * 获取session数据
-     * @param key
-     * @return Object
+     * @param key 要获取对象的key值
+     * @return session中key对应的value值
      */
     public Object getSessionAttribute(String key) {
         return getSession().getAttribute(key);
     }
 
-    /**
-     * 跳转到通用错误页面
-     * @param errMsg
-     * @return ModelAndView
-     */
-    public ModelAndView goToErrorPage(String errMsg) {
-        ModelAndView mav = new ModelAndView(ConfigConstants.COMMON_ERROR_PAGE);
-        mav.addObject(ConfigConstants.ERROR_MSG, errMsg);
-        return mav;
-    }
 }

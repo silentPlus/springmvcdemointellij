@@ -1,7 +1,6 @@
 package com.suvan.common.base;
 
 import com.suvan.common.entity.PageInfo;
-import org.apache.poi.ss.formula.functions.T;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -21,7 +20,7 @@ import java.util.Map;
  * @create 2016-12-28-15:47
  */
 @Repository
-public class BaseDaoImpl extends NamedParameterJdbcDaoSupport implements BaseDao<T> {
+public class BaseDaoImpl<T> extends NamedParameterJdbcDaoSupport implements BaseDao<T> {
 
     private final static String PAGE_SQL_PREFIX = "select * from(select m.*,rownum num from (";
     private final static String PAGE_SQL_END = ") m where rownum<=%1$s) where num>%2$s";
