@@ -3,6 +3,7 @@ package com.suvan.controller;
 import com.suvan.common.base.BaseController;
 import com.suvan.common.entity.AjaxResult;
 import com.suvan.entity.Demo;
+import com.suvan.mapper.model.MDemo;
 import com.suvan.service.DemoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,6 +34,14 @@ public class DemoController extends BaseController {
     public AjaxResult getData() {
         AjaxResult ajaxResult = new AjaxResult();
         List<Demo> data = demoServiceImpl.getDemoList();
+        ajaxResult.setEntity(data);
+        return ajaxResult;
+    }
+
+    @RequestMapping("/getmapperdata")
+    public AjaxResult getMapperData() {
+        AjaxResult ajaxResult = new AjaxResult();
+        List<MDemo> data = demoServiceImpl.getDemoListByExample();
         ajaxResult.setEntity(data);
         return ajaxResult;
     }

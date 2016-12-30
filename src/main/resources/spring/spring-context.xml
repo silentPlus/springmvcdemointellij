@@ -5,5 +5,6 @@
 
     <description>加载资源文件</description>
     <import resource="classpath:jdbc/spring-jdbc.xml" />
+    <import resource="classpath:mybatis/spring-mybatis.xml" />
     <import resource="classpath:static/static-constants.xml" />
 </beans>

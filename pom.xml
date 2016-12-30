@@ -71,6 +71,8 @@
     <tomcat.redis.session>0.8</tomcat.redis.session>
     <!-- logback版本 -->
     <logback.version>1.1.7</logback.version>
+      <!-- mybatis-generator-maven-plugin版本 -->
+    <mybatis.generator.version>1.3.2</mybatis.generator.version>
   </properties>
 
   <dependencies>
@@ -540,8 +542,8 @@
             <properties>
                 <!-- 数据库配置 -->
                 <!--oracle数据库配置-->
-                <!--<database.uri><![CDATA[jdbc:oracle:thin:@219.150.85.232:9801]]></database.uri>
-                <database.url><![CDATA[jdbc:oracle:thin:@219.150.85.232:9801:crmorcl]]></database.url>-->
+                <!--<database.uri><![CDATA[jdbc:oracle:thin:@127.0.0.1:1521]]></database.uri>
+                <database.url><![CDATA[jdbc:oracle:thin:@127.0.0.1:1521:orcl]]></database.url>-->
                 <!--mysql数据库配置-->
                 <database.url><![CDATA[jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&amp;characterEncoding=utf-8&amp;allowMultiQueries=true]]></database.url>
                 <database.username>root</database.username>
@@ -565,19 +567,22 @@
 
     <build>
         <finalName>springmvcdemointellij</finalName>
-        <sourceDirectory>src</sourceDirectory>
+        <sourceDirectory>src/main/java</sourceDirectory>
         <resources>
             <resource>
                 <directory>src/main/java</directory>
                 <includes>
-                    <include>*.properties</include>
-                    <include>*.xml</include>
+                    <include>**/*.xml</include>
                 </includes>
                 <filtering>false</filtering>
             </resource>
             <resource>
                 <directory>src/main/resources</directory>
                 <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/webapp/resources</directory>
+                <filtering>false</filtering>
             </resource>
         </resources>
         <plugins>
@@ -590,6 +595,11 @@
                     <target>1.7</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.mybatis.generator</groupId>
+                <artifactId>mybatis-generator-maven-plugin</artifactId>
+                <version>${mybatis.generator.version}</version>
             </plugin>
             <!--<plugin>
                 <artifactId>maven-war-plugin</artifactId>
