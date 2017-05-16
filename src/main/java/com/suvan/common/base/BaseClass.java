@@ -1,5 +1,6 @@
 package com.suvan.common.base;
 
+import com.alibaba.fastjson.JSONArray;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.context.request.RequestContextHolder;
@@ -58,4 +59,10 @@ public class BaseClass {
         return getSession().getAttribute(key);
     }
 
+    public static void main(String[] args) {
+        JSONArray jsonArray = new JSONArray();
+        String s = "[从业人员工资总额;1-本季][杭州]";
+        jsonArray.add(s);
+        System.out.println(jsonArray);
+    }
 }

@@ -71,8 +71,10 @@
     <tomcat.redis.session>0.8</tomcat.redis.session>
     <!-- logback版本 -->
     <logback.version>1.1.7</logback.version>
-      <!-- mybatis-generator-maven-plugin版本 -->
+    <!-- mybatis-generator-maven-plugin版本 -->
     <mybatis.generator.version>1.3.2</mybatis.generator.version>
+    <!-- mongo-java-driver版本 -->
+    <mongo.java.driver.version>3.4.2</mongo.java.driver.version>
   </properties>
 
   <dependencies>
@@ -186,6 +188,11 @@
       <dependency>
           <groupId>org.springframework</groupId>
           <artifactId>spring-test</artifactId>
+          <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+          <groupId>org.springframework</groupId>
+          <artifactId>spring-context-support</artifactId>
           <version>${spring.version}</version>
       </dependency>
       <!-- spring依赖结束 -->
@@ -533,6 +540,13 @@
           <version>1.2.2</version>
       </dependency>
       <!-- mybatis依赖结束 -->
+
+      <!--mongodb依赖-->
+      <dependency>
+          <groupId>org.mongodb</groupId>
+          <artifactId>mongodb-driver</artifactId>
+          <version>${mongo.java.driver.version}</version>
+      </dependency>
   </dependencies>
 
     <!-- 配置发布环境 -->

@@ -7,4 +7,5 @@
     <import resource="classpath:jdbc/spring-jdbc.xml" />
     <import resource="classpath:mybatis/spring-mybatis.xml" />
     <import resource="classpath:static/static-constants.xml" />
+    <import resource="classpath:cache/spring-cache.xml" />
 </beans>
