@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>垃圾回收</title>
+</head>
+<body>
+
+</body>
+<script>
+    var a = {};// 对象{}的引用计数为1
+    var b = a; // 对象{}的引用计数为2
+    a = null;  // 对象{}的引用计数为2-1=1，此时{}不会被清除
+    b = null;  // 对象{}的引用计数为1-1=0，此时{}准备好被回收
+
+    function fun() {
+        var a = {};// 对象{}的引用计数为1
+        var b = {};// 对象{}的引用计数为1
+        a.prot = b;// b指向的对象{}的引用计数为2
+        b.prot = a;// a指向的对象{}的引用计数为2
+    }
+
+    fun();
+</script>
+</html>

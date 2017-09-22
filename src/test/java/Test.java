@@ -3,23 +3,35 @@
  */
 public class Test {
     public static void main(String[] args) {
-        SingleTon singleTon = SingleTon.getInstance();
-        System.out.println("count1=" + singleTon.count1);
-        System.out.println("count2=" + singleTon.count2);
+
+        /*Map<String, String> map = new HashMap<>();
+        System.out.println(Math.abs(Double.parseDouble(map.get("a"))));*/
     }
+
 }
 
-class SingleTon {
-    private static SingleTon singleTon = new SingleTon();
-    public static int count1;
-    public static int count2 = 0;
+class A{
 
-    private SingleTon() {
-        count1++;
-        count2++;
+}
+
+enum Fruit{
+    aaa("1", "2"),
+    bbb("3", "4");
+
+    private String color;
+    private String weight;
+
+    Fruit(String color, String weight) {
+        this.color = color;
+        this.weight = weight;
     }
 
-    public static SingleTon getInstance() {
-        return singleTon;
+    public String getColor() {
+        return color;
     }
+
+    public String getWeight() {
+        return weight;
+    }
+
 }
