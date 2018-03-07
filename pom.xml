@@ -552,6 +552,22 @@
           <artifactId>mongodb-driver</artifactId>
           <version>${mongo.java.driver.version}</version>
       </dependency>-->
+      <dependency>
+          <groupId>cglib</groupId>
+          <artifactId>cglib</artifactId>
+          <version>3.2.5</version>
+          <exclusions>
+              <exclusion>
+                  <artifactId>ant</artifactId>
+                  <groupId>org.apache.ant</groupId>
+              </exclusion>
+          </exclusions>
+      </dependency>
+      <dependency>
+          <groupId>commons-beanutils</groupId>
+          <artifactId>commons-beanutils</artifactId>
+          <version>1.9.3</version>
+      </dependency>
   </dependencies>
 
     <!-- 配置发布环境 -->

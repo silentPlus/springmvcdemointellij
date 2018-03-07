@@ -11,12 +11,16 @@ import java.net.InetAddress;
 public class UDPUtils {
 
     private final static int PORT = 14;
-    private static final String IP = "127.0.0.1";
+    private static final String IP = "192.168.43.23";
 
     public static void main(String[] args) throws Exception{
         ServerUDP server = new ServerUDP();
         Thread thread = new Thread(server);
         thread.start();
+        Thread.sleep(1000);
+        send("111", 0);
+        send("222", 0);
+        send("333", 0);
     }
 
     public static void send(String msg, int port) {
@@ -24,7 +28,7 @@ public class UDPUtils {
         //传入0表示让操作系统分配一个端口号
         try (DatagramSocket socket = new DatagramSocket(port)) {
             socket.setSoTimeout(10000);
-            InetAddress host = InetAddress.getLocalHost();
+            InetAddress host = InetAddress.getByName(IP);
             //指定包要发送的目的地
             DatagramPacket request = new DatagramPacket(buf, buf.length, host, PORT);
             socket.send(request);
