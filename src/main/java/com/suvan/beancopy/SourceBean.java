@@ -15,6 +15,7 @@ public class SourceBean {
 
     private String column3;
     private String column6;
+    private String column5;
 
     public SourceBean() {
     }
