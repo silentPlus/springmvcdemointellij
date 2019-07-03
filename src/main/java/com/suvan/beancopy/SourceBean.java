@@ -11,6 +11,9 @@ public class SourceBean {
 
     private String convert;
 
+    private String column3;
+    private String column4;
+
     public SourceBean() {
     }
 
