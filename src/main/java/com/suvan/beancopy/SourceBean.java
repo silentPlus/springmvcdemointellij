@@ -8,6 +8,8 @@ public class SourceBean {
     private String title;
     private String source;
     private Boolean eat;
+    private String column1;
+    private String column2;
 
     private String convert;
 
@@ -79,4 +81,5 @@ public class SourceBean {
                 ", convert='" + convert + '\'' +
                 '}';
     }
+
 }
