@@ -57,7 +57,7 @@
     <!-- ehcache-web 版本 -->
     <ehcache-web.version>2.0.4</ehcache-web.version>
     <!-- XStream 解析XML 1.4.7 -->
-    <xstream.version>1.4.7</xstream.version>
+    <xstream.version>1.4.16</xstream.version>
     <!-- XPP3是一个非常快的XML拉式转换器工具,如果你不想包含这个依赖，你可以使用标准的JAXP DOM转换器来代替。 -->
     <xpp3.version>1.1.4c</xpp3.version>
     <!-- jedis使用redis的java客户端 -->
