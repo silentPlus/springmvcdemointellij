@@ -49,7 +49,7 @@
     <!-- druid连接池版本 -->
     <druid.version>1.0.15</druid.version>
     <!-- httpclient版本 -->
-    <httpclient.version>4.3.6</httpclient.version>
+    <httpclient.version>4.5.13</httpclient.version>
     <!-- tomcat maven插件  -->
     <tomcat.version>2.2</tomcat.version>
     <!-- ehcache 版本 -->
