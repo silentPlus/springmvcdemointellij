@@ -22,7 +22,7 @@
     <!-- spring-security版本 -->
     <!--<spring-security.version>3.2.0.RELEASE</spring-security.version>-->
     <!-- hibernate版本 -->
-    <hibernate.version>5.1.0.Final</hibernate.version>
+    <hibernate.version>5.4.24.Final</hibernate.version>
     <!-- hibernate-validator版本 -->
     <hibernate-validator.version>5.3.4.Final</hibernate-validator.version>
     <!-- aspectj版本 -->
