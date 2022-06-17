@@ -41,7 +41,7 @@
     <!-- jackson(com.fasterxml.jackson.core)版本 -->
     <fasterxml.jackson.version>2.3.0</fasterxml.jackson.version>
     <!-- fastjson版本 -->
-    <fastjson.version>1.2.6</fastjson.version>
+    <fastjson.version>1.2.83</fastjson.version>
     <!-- oracle驱动版本 -->
     <oracle.version>10.2.0.1.0</oracle.version>
     <!-- oracle驱动版本 -->
